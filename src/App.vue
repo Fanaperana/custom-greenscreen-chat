@@ -1,13 +1,16 @@
 <template>
-  <div class="container-fluid h-100">
+  <div class="container h-full mx-auto">
+    <div class="flex flex-col h-full p-6">
+      <div class="grid content-end place-content-start" id="messageContainer">
+        <MessageBubble v-for="(message, index) in messages" :message="message" :key="index" :keyid="index"/>
+      </div>
 
-    <div class="d-flex flex-column-reverse" id="messageContainer">
-
-      <div id="textCompose" class="text-bubble" contenteditable></div>
-      <MessageBubble v-for="(message, index) in messages" :message="message" :key="index" />
-
+      <div class="mx-auto mt-4 mb-10" style="width: 400px;">
+        <div id="textCompose" class="text-bubble" contenteditable @keydown.enter.prevent="addToArray()"></div>
+      </div>
       
     </div>
+
     
   </div>
 </template>
@@ -21,12 +24,20 @@ export default {
     MessageBubble
   },
   data: () => ({
-    messages: [
-      'Hello, my name is prince.',
-      'Hello back grom the book.'
-    ],
+    messages: [ ],
     mytext: ''
-  })
+  }),
+  methods: {
+    addToArray () {
+      const c = document.getElementById("textCompose");
+      
+      if (c.textContent) {
+        this.messages.push(c.textContent);
+        c.innerText='';
+      }
+      c.innerText='';
+    }
+  }
 }
 </script>
 
@@ -48,22 +59,25 @@ body,
   width: 100%;
 }
 #messageContainer{
-  max-width: 350px;
+  max-width: 400px;
+  min-width: 400px;
+  width: 400px;
   margin-left: auto;
   margin-right: auto;
-  padding: 15px;
+  padding: 5px;
   height: 100%;
 }
-
 #textCompose{
   -moz-appearance: textfield-multiline;
   -webkit-appearance: textarea;
-  border-radius: 20px;
+  border-radius: 15px;
   background-color: #E5E5EA;
   color: black;
   height:auto !important;
   resize: none;
   display: inline-block;
+  max-width: 100%;
+  text-align: justify;
 }
 
 #textCompose:focus{
